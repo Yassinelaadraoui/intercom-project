@@ -1,0 +1,9 @@
+{
+  "name": "intercom",
+  "jest": {
+    "verbose": true
+  },
+  "scripts":{
+    "test":"jest"
+  }
+}

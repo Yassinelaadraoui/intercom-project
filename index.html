@@ -1,12 +1,42 @@
 
 <html>
 <script
+  src="require.js"
+></script>
+
+<script type="text/javascript" src="https://js.taplytics.com/jssdk/ad5fec4fe0c14d7da75c959f4fa70cc5.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
   <script
-    src="require.js"
+    src="sum.js"
   ></script>
+
+  <body ng-app="myApp" ng-controller="myCtrl">
+
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in arrayer">
+        <th scope="row">{{x.user_id}}</th>
+        <td>{{x.name}}</td>
+
+      </tr>
+
+    </tbody>
+  </table>
+</body>
+
 
 
 </html>
@@ -43,7 +73,7 @@ var array = [{"latitude": "52.986375", "user_id": 12, "name": "Christina McArdle
 {"latitude": "53.761389", "user_id": 30, "name": "Nick Enright", "longitude": "-7.2875"},
 {"latitude": "54.080556", "user_id": 23, "name": "Eoin Gallagher", "longitude": "-6.361944"},
 {"latitude": "52.833502", "user_id": 25, "name": "David Behan", "longitude": "-8.522366"}];
-
+var array_people_less_100 = [];
 var longitude = array[0].longitude ;
 var latitude = array[0].latitude;
 var dublinOffice_longitude= -6.257664;
@@ -52,8 +82,9 @@ var R = 6371; // km
 function toRad(x) {
    return x * Math.PI / 180;
 }
-
-function Calculate_distance(){
+// the calculate function uses the  haversine formula to calculate the distance between a client and the dublin office
+// function takes the coordinates and applys the math using Math library
+function calculate(){
 
   var x1 = latitude-dublinOffice_latitude;
   var dLat = toRad(x1);
@@ -65,17 +96,54 @@ function Calculate_distance(){
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var distance = R * c;
   if (distance <= 100) {
-    alert(distance);
+    console.log(distance);
+    return distance;
+
+
+
   }
+}
+//This function sorts the array based on user ID in ascending orders
+function sort( arrayx ){
+
+    for (var i = 0; i < arrayx.length; i++)
+
+      for (var j = arrayx.length-1 ;  j > i   ; j--) {
+
+
+        if (arrayx[j].user_id < arrayx[i].user_id) {
+          var temp = arrayx[j];
+          arrayx[j] =arrayx[i];
+          arrayx[i]= temp;
+        }
+      }
+      if(arrayx[0].user_id<arrayx[1].user_id)
+      return 0;
+
 }
 for (var i = 0; i < array.length; i++) {
    longitude = array[i].longitude ;
    latitude = array[i].latitude;
-   Calculate_distance();
+
+   var distance = calculate();
+   if (i == 0) {
+
+
+   }
+   if(distance <=100){
+     array_people_less_100.push(array[i]);
+
+
+   }
 }
 
+sort(array_people_less_100);
 
-
+//Using angularjs to easily display the clients and their id as a bootstrap table 
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.arrayer = array_people_less_100;
+});
 
 
 </script>
