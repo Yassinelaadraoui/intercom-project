@@ -78,10 +78,35 @@ var longitude = array[0].longitude ;
 var latitude = array[0].latitude;
 var dublinOffice_longitude= -6.257664;
 var dublinOffice_latitude= 53.339428;
+//earth radius
 var R = 6371; // km
+
+//convert from degrees to Rad 
 function toRad(x) {
    return x * Math.PI / 180;
 }
+
+
+//loading array through AJAX
+
+/*
+var request = new XMLHttpRequest();
+ request.open("GET", "https://api.myjson.com/bins/z774d", false);
+ request.send(null);
+ var array = request.responseText;
+ alert(array); // Shows "15"
+*/
+
+
+
+
+/*$.getJSON("gistfile1.json", function(json) {
+    var array = json; // to get the data directly from the json file but this approach needs a server or to allow chrome to load files using the command 'chrome --allow-file-access-from-files'
+});
+*/
+
+
+
 // the calculate function uses the  haversine formula to calculate the distance between a client and the dublin office
 // function takes the coordinates and applys the math using Math library
 function calculate(){
@@ -110,14 +135,14 @@ function sort( arrayx ){
 
       for (var j = arrayx.length-1 ;  j > i   ; j--) {
 
-
+          //loop through the whole array while switching position if the value on the left is bigger than the right
         if (arrayx[j].user_id < arrayx[i].user_id) {
           var temp = arrayx[j];
           arrayx[j] =arrayx[i];
           arrayx[i]= temp;
         }
       }
-      if(arrayx[0].user_id<arrayx[1].user_id)
+      if(arrayx[0].user_id<arrayx[1].user_id)   //test to see if array is sorted
       return 0;
 
 }
@@ -139,7 +164,7 @@ for (var i = 0; i < array.length; i++) {
 
 sort(array_people_less_100);
 
-//Using angularjs to easily display the clients and their id as a bootstrap table 
+//Using angularjs to easily display the clients and their id as a bootstrap table
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope) {
     $scope.arrayer = array_people_less_100;
